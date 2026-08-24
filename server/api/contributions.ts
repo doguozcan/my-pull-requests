@@ -36,6 +36,8 @@ export default defineEventHandler(async () => {
   for (const pr of data.items) {
     const [owner, name] = pr.repository_url.split('/').slice(-2)
     const repo = await fetchRepo(owner!, name!)
+    // Skip PRs whose repo is inaccessible (deleted, renamed, or hidden from the token)
+    if (!repo) continue
 
     prs.push({
       repo: `${owner}/${name}`,
